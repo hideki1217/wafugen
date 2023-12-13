@@ -1,0 +1,10 @@
+{
+    "name": "wafugen-backend",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "workspaceFolder": "/workspaces/wafugen",
+    "postCreateCommand": "/bin/bash ./setup.sh",
+    "forwardPorts": [8080],
+    // "remoteUser": "vscode"
+}
