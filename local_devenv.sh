@@ -5,4 +5,4 @@ if [ ! -d venv ]; then
 fi
 source ./venv/bin/activate
 pip install -r ./backend/requirements.txt
-git config --global commit.template .gitmessage.txt
+git config --local commit.template .gitmessage.txt
