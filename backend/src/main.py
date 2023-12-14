@@ -10,19 +10,23 @@ def hello_world():
 
 @app.route("/v1/report")
 def create_report():
-    def parse_youtube_ids(s: str):
-        assert s[0] == "[" and s[-1] == "]"
+    def parse_video_ids(s: str):
         return s[1:-1].split(",")
 
-    youtube_ids = parse_youtube_ids(request.args["youtube_ids"])
-
-    return [{
-        "youtube_id": youtube_id,
-        "tsuri_score": 50,
-        "tsuri_report": {
-            "example": 10
+    def create(video_id):
+        return {
+            "video_id": video_id,
+            "tsuri_score": 50,
+            "tsuri_report": {
+                "example": "*"
+            }
         }
-    } for youtube_id in youtube_ids]
+
+    video_ids = parse_video_ids(request.args["video_id"])
+
+    return {
+        "items": [create(video_id) for video_id in video_ids]
+    }
 
 
 app.run(host="0.0.0.0", port=40000, debug=True)
