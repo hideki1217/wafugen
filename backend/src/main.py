@@ -1,4 +1,11 @@
 from flask import Flask, request
+import domain
+import dataclasses
+import os
+import dotenv
+
+dotenv.load_dotenv()
+youtube = domain.Youtube(os.environ["GOOGLE_API_KEY"])
 
 app = Flask(__name__)
 
@@ -11,21 +18,25 @@ def hello_world():
 @app.route("/v1/report")
 def create_report():
     def parse_video_ids(s: str):
-        return s[1:-1].split(",")
+        return s.split(",")
 
-    def create(video_id):
-        return {
-            "video_id": video_id,
-            "tsuri_score": 50,
-            "tsuri_report": {
-                "example": "*"
-            }
-        }
+    def create_items(video_ids):
+        videos = youtube.video_summary(video_ids)
+
+        return [{
+            "status": "ok",
+            "video_id": video.video_id,
+            "tsuri_score": min(int(video.like_count * 1000 / video.view_count), 100),
+            "tsuri_report": dataclasses.asdict(video)
+        } if isinstance(video, domain.Video) else {
+            "status": f"ERROR: {video.error_message}",
+            "video_id": video.video_id,
+            "tsuri_score": -1,
+        } for video in videos]
 
     video_ids = parse_video_ids(request.args["video_id"])
-
     return {
-        "items": [create(video_id) for video_id in video_ids]
+        "items": create_items(video_ids)
     }
 
 
