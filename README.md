@@ -1,14 +1,16 @@
 
 # For Frontend Developers
 
-- How to run this server in your local machine
+1. Ask to hideki1217 about .env including API Key
+2. Run the commands below
     ```
     make run_backend
     ```
 
 # For Backend Developers
 
-- How to create dev environment
+1. Ask to hideki1217 about .env including API Key
+2. Run the commands below
   ```
   ./local_devenv.sh
   ```
