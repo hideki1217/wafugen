@@ -18,18 +18,20 @@
 # API endpoint
 
 ```
-GET/v1/report?youtube_ids = {str[]: Youtube公式識別子たち}
+GET/v1/report?video_id={str[]: Youtube公式Video識別子たち}
 
 return {
-    num_items: int,
-    reports: [
-        youtube_id: str, 
-        tsuri_score: int(lower=0, upper=100), 
-        tsuri_report: {*}
+    items: [
+        {
+            status: str: Ok or ErrorMessage,
+            video_id: str, 
+            tsuri_score: int(lower=0, upper=100), 
+            tsuri_report: {*}
+        }
     ]
 }
 
 // ExampleCommand: 
-// curl 'http://localhost:40000/v1/report?youtube_ids=\[youtube\]'
+// curl 'http://localhost:40000/v1/report?video_id=hGk_ez5di2g,BEygUktR-Jg'
 ```
 
