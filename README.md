@@ -18,15 +18,15 @@
 # API endpoint
 
 ```
-GET/v1/report?video_id={str[]: Youtube公式Video識別子たち}
+GET/v1/report?videoId={str[]: Youtube公式Video識別子たち}
 
 return {
     items: [
         {
             status: str: Ok or ErrorMessage,
-            video_id: str, 
-            tsuri_score: int(lower=0, upper=100), 
-            tsuri_report: {*}
+            videoId: str, 
+            tsuriScore: int(lower=0, upper=100), 
+            tsuriReport: {*}
         }
     ]
 }
