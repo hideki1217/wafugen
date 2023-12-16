@@ -34,7 +34,8 @@ def create_report():
             "tsuriScore": min(int(video.like_count * 1000 / video.view_count), 100),
             "tsuriReport":
                 utility.asdict_camel(video) | {"image_tag": [
-                    caption for caption in vision.read(video.thumbnail_standard.url)]}
+                    caption for caption in vision.read(video.thumbnail_standard.url)],
+                "transcript": youtube.video_transcript(video.video_id)}
         } if isinstance(video, domain.Video) else {
             "status": f"ERROR: {video.error_message}",
             "videoId": video.video_id,

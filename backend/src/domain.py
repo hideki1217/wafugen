@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 from googleapiclient.discovery import build
+from youtube_transcript_api import YouTubeTranscriptApi
 import datetime
 import error
 
@@ -40,6 +41,13 @@ class Video:
 class VideoError(error.Error):
     video_id: VideoId
     error_message: str
+
+
+@dataclass(frozen=True)
+class TranscriptSegment:
+    text: str
+    start: float
+    duration: float
 
 
 class Youtube:
@@ -114,3 +122,14 @@ class Youtube:
                 published_at=datetime.datetime.strptime(
                     item["snippet"]["publishedAt"], "%Y-%m-%dT%H:%M:%SZ")
             ) for item in items]
+        
+    def video_transcript(self, video_id):
+        """
+        字幕をとってくる
+        """
+        transcript = YouTubeTranscriptApi.get_transcript(video_id=video_id, languages=("ja", "en"))
+        
+        if isinstance(transcript, list):
+            return [TranscriptSegment(seg["text"], seg["start"], seg["duration"]) for seg in transcript]
+        else:
+            return error.Error("YoutubeTranscriptAPI Error: some error occured")

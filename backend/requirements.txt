@@ -7,3 +7,4 @@ python-dotenv
 
 azure-cognitiveservices-vision-computervision
 pillow
+youtube-transcript-api
