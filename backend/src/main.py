@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 import domain
 import dataclasses
 import os
@@ -9,6 +9,7 @@ dotenv.load_dotenv()
 youtube = domain.Youtube(os.environ["GOOGLE_API_KEY"])
 
 app = Flask(__name__)
+# app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 
 
 @app.route("/")
@@ -36,9 +37,11 @@ def create_report():
         } for video in videos]
 
     video_ids = parse_video_ids(request.args["videoId"])
-    return jsonify({
+    response = jsonify({
         "items": create_items(video_ids)
-    })
+    }, 200)
+    response.headers["Cache-Control"] = "max-age=604800"
+    return response
 
 
 app.run(host="0.0.0.0", port=40000, debug=True)
