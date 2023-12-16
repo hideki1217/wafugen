@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 /workspace/src/main.py
+python3 /workspace/src/main.py $1

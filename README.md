@@ -35,3 +35,9 @@ return {
 // curl 'http://localhost:40000/v1/report?videoId=hGk_ez5di2g,BEygUktR-Jg'
 ```
 
+# API endpoint url
+```
+release: wafugen-hacks-api.azurewebsites.net
+debug:   localhost:40000
+```
+
