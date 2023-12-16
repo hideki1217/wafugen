@@ -48,6 +48,9 @@ class Youtube:
                               developerKey=google_api_key)
 
     def video_comments(self, video_id: VideoId) -> list[Comment]:
+        """
+        コメントをとってくる
+        """
         video_response = self._youtube.commentThreads().list(
             part='snippet',
             videoId=video_id
@@ -76,6 +79,9 @@ class Youtube:
         return comments
 
     def video_summary(self, video_id: VideoId | list[VideoId]) -> list[Video] | VideoError:
+        """
+        動画の詳細な情報を取ってくる
+        """
         if not isinstance(video_id, list):
             video_id = [video_id]
 

@@ -25,6 +25,9 @@ class Vision:
         self._client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(subscription_key))
 
     def tags(self, image_url) -> list[ImageTag] | error.Error:
+        """
+        画像を単語、タグの羅列にする
+        """
         result = self._client.tag_image(image_url, language="ja")
         try:
             return [ImageTag(tag.name, tag.confidence) for tag in result.tags]
@@ -32,6 +35,9 @@ class Vision:
             return error.Error("Vision Error: tag_image")
     
     def description(self, image_url):
+        """
+        画像を説明する文章を出力する
+        """
         result = self._client.describe_image(image_url, language="ja")
         try:
             return [ImageTag(tag, None) for tag in result.tags], [ImageCaption(caption.text, caption.confidence) for caption in result.captions]
@@ -39,6 +45,9 @@ class Vision:
             return error.Error("Vision Error: tag_image")
     
     def read(self, image_url):
+        """
+        画像から含まれる単語列を取得する
+        """
         read_response = self._client.read(image_url, language="ja", raw=True)
 
         read_operation_location = read_response.headers["Operation-Location"]
