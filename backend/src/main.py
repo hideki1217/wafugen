@@ -4,12 +4,12 @@ import dataclasses
 import os
 import dotenv
 import utility
+import sys
 
 dotenv.load_dotenv()
 youtube = domain.Youtube(os.environ["GOOGLE_API_KEY"])
 
 app = Flask(__name__)
-# app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 
 
 @app.route("/")
@@ -44,5 +44,4 @@ def create_report():
     response.headers["Cache-Control"] = "max-age=604800"
     return response
 
-
-app.run(host="0.0.0.0", port=40000, debug=True)
+app.run(host="0.0.0.0", port=int(sys.argv[1]), debug=True)

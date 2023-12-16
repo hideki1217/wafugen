@@ -6,6 +6,7 @@ RUN apt-get update -y && \
     vim curl iputils-ping net-tools \
     make 
 
+ADD . /workspace
 WORKDIR /workspace
 
 COPY ./run.sh /workspace/run.sh
