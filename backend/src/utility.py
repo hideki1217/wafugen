@@ -1,5 +1,5 @@
 from typing import Callable
-
+import dataclasses
 
 def snake2camel(s):
     segments = s.split("_")
@@ -15,4 +15,5 @@ def convert_key(d: dict, convert: Callable[[str], str]):
     
     return {convert(key): _convert(d[key]) for key in d.keys()}
 
-    
+def asdict_camel(data):
+    return convert_key(dataclasses.asdict(data), snake2camel)

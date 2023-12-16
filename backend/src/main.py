@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, make_response
 import domain
-import dataclasses
+import computer_vision
 import os
 import dotenv
 import utility
@@ -8,6 +8,8 @@ import sys
 
 dotenv.load_dotenv()
 youtube = domain.Youtube(os.environ["GOOGLE_API_KEY"])
+vision = computer_vision.Vision(
+    os.environ["AZURE_VISION_KEY"], os.environ["AZURE_VISION_ENDPOINT"])
 
 app = Flask(__name__)
 app.json.ensure_ascii = False
@@ -30,7 +32,9 @@ def create_report():
             "status": "ok",
             "videoId": video.video_id,
             "tsuriScore": min(int(video.like_count * 1000 / video.view_count), 100),
-            "tsuriReport": utility.convert_key(dataclasses.asdict(video), utility.snake2camel)
+            "tsuriReport":
+                utility.asdict_camel(video) | {"image_tag": [
+                    caption for caption in vision.read(video.thumbnail_standard.url)]}
         } if isinstance(video, domain.Video) else {
             "status": f"ERROR: {video.error_message}",
             "videoId": video.video_id,
@@ -44,5 +48,6 @@ def create_report():
     response.status_code = 200
     response.headers["Cache-Control"] = "max-age=604800"
     return response
+
 
 app.run(host="0.0.0.0", port=int(sys.argv[1]), debug=True)

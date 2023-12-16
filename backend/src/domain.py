@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 from googleapiclient.discovery import build
 import datetime
+import error
 
 VideoId = str
 CommentId = str
@@ -16,12 +17,19 @@ class Comment:
 
 
 @dataclass(frozen=True)
+class Thumbnail:
+    url: str
+    width: int
+    height: int
+
+
+@dataclass(frozen=True)
 class Video:
     video_id: VideoId
     title: str
     description: str
-    thumbnail_url: str
-    thumbnail_size: (int, int)
+    thumbnail_default: Thumbnail
+    thumbnail_standard: Thumbnail
     like_count: int
     view_count: int
     comment_count: int
@@ -29,7 +37,7 @@ class Video:
 
 
 @dataclass(frozen=True)
-class VideoError:
+class VideoError(error.Error):
     video_id: VideoId
     error_message: str
 
@@ -88,9 +96,12 @@ class Youtube:
                 video_id=item["id"],
                 title=item["snippet"]["title"],
                 description=item["snippet"]["description"],
-                thumbnail_url=item["snippet"]["thumbnails"]["default"]["url"],
-                thumbnail_size=(int(item["snippet"]["thumbnails"]["default"]["width"]), int(
-                    item["snippet"]["thumbnails"]["default"]["height"])),
+                thumbnail_default=Thumbnail(item["snippet"]["thumbnails"]["default"]["url"],
+                                    int(item["snippet"]["thumbnails"]["default"]["width"]),
+                                    int(item["snippet"]["thumbnails"]["default"]["height"])),
+                thumbnail_standard=Thumbnail(item["snippet"]["thumbnails"]["standard"]["url"],
+                                    int(item["snippet"]["thumbnails"]["standard"]["width"]),
+                                    int(item["snippet"]["thumbnails"]["standard"]["height"])),
                 like_count=int(item["statistics"]["likeCount"]),
                 view_count=int(item["statistics"]["viewCount"]),
                 comment_count=int(item["statistics"]["commentCount"]),
