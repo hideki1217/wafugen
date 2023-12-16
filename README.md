@@ -15,6 +15,11 @@
   ./local_devenv.sh
   ```
 
+# How to deploy
+
+1. docker login to [azure container registry](acrwafugensensui.azurecr.io)
+2. ```make deploy_backend ```
+
 # API endpoint
 
 ```
