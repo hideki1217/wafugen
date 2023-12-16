@@ -10,6 +10,7 @@ dotenv.load_dotenv()
 youtube = domain.Youtube(os.environ["GOOGLE_API_KEY"])
 
 app = Flask(__name__)
+app.json.ensure_ascii = False
 
 
 @app.route("/")
