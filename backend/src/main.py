@@ -39,7 +39,8 @@ def create_report():
     video_ids = parse_video_ids(request.args["videoId"])
     response = jsonify({
         "items": create_items(video_ids)
-    }, 200)
+    })
+    response.status_code = 200
     response.headers["Cache-Control"] = "max-age=604800"
     return response
 
