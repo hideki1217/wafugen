@@ -32,6 +32,6 @@ return {
 }
 
 // ExampleCommand: 
-// curl 'http://localhost:40000/v1/report?video_id=hGk_ez5di2g,BEygUktR-Jg'
+// curl 'http://localhost:40000/v1/report?videoId=hGk_ez5di2g,BEygUktR-Jg'
 ```
 
