@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, make_response
 import domain
+import chat
 import computer_vision
 import os
 import dotenv
@@ -10,6 +11,8 @@ dotenv.load_dotenv()
 youtube = domain.Youtube(os.environ["GOOGLE_API_KEY"])
 vision = computer_vision.Vision(
     os.environ["AZURE_VISION_KEY"], os.environ["AZURE_VISION_ENDPOINT"])
+chatbot = chat.ChatBot(os.getenv("OPENAI_API_BASE"), os.getenv(
+    "OPENAI_API_VERSION"), os.getenv("OPENAI_API_KEY"), os.getenv("OPENAI_API_ENGINE"))
 
 app = Flask(__name__)
 app.json.ensure_ascii = False
@@ -35,7 +38,8 @@ def create_report():
             "tsuriReport":
                 utility.asdict_camel(video) | {"image_tag": [
                     caption for caption in vision.read(video.thumbnail_standard.url)],
-                "transcript": youtube.video_transcript(video.video_id)}
+                # "transcript": youtube.video_transcript(video.video_id)
+                }
         } if isinstance(video, domain.Video) else {
             "status": f"ERROR: {video.error_message}",
             "videoId": video.video_id,
@@ -44,7 +48,8 @@ def create_report():
 
     video_ids = parse_video_ids(request.args["videoId"])
     response = jsonify({
-        "items": create_items(video_ids)
+        "items": create_items(video_ids),
+        "chatbot": chatbot.create([chat.Message("system", "You are an AI assistant that helps people find information.").asdict()])
     })
     response.status_code = 200
     response.headers["Cache-Control"] = "max-age=604800"
