@@ -17,10 +17,10 @@ class ChatBot:
         self._default_engine = engine
         
     
-    def create(self, message_list: list[Message]):
+    def create(self, message_list: list[Message]) -> list[Message]:
         completion = self._client.chat.completions.create(model=self._default_engine,
                                             messages=message_list,
-                                            temperature=0.7,
+                                            temperature=0.4,
                                             max_tokens=800,
                                             top_p=0.95,
                                             frequency_penalty=0,
